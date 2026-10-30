@@ -1,113 +1,127 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>On Level – Configurador (Demo)</title>
+<title>On Level – Presupuesto desde una foto (Demo)</title>
 <style>
-:root{--bg:#f6f4f0;--ink:#1d1d1b;--mut:#6b6760;--acc:#a8865a;--card:#fff;--line:#e4dfd6}
+:root{--bg:#faf8f5;--ink:#161614;--mut:#77726a;--acc:#a8865a;--line:#e7e2d9}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
-.demo{background:#1d1d1b;color:#fff;text-align:center;font-size:.8rem;padding:.4rem}
-header{display:flex;justify-content:space-between;align-items:center;padding:1rem;max-width:1100px;margin:auto}
-.logo{font-weight:700;letter-spacing:.2em}.logo span{color:var(--acc)}
-.geo{background:#efe7da;padding:.7rem 1rem;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;align-items:center;font-size:.9rem}
-main{max-width:1100px;margin:auto;padding:1rem}
-h1{font-weight:300;font-size:clamp(1.6rem,4vw,2.6rem);margin:.5rem 0}
-.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem}
-.card.sel{outline:2px solid var(--acc)}.card.na{opacity:.55}
-button,select,input{font:inherit}button{cursor:pointer;border:0;border-radius:999px;padding:.6rem 1.1rem;background:var(--ink);color:#fff}
-button.sec{background:transparent;color:var(--ink);border:1px solid var(--ink)}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--acc)}
-.steps{display:flex;gap:.3rem;margin:1rem 0;flex-wrap:wrap}.steps b{flex:1;min-width:60px;font-size:.75rem;padding:.4rem;border-bottom:3px solid var(--line);color:var(--mut)}.steps b.on{border-color:var(--acc);color:var(--ink)}
-.cfg{display:grid;gap:1rem;grid-template-columns:1fr}@media(min-width:800px){.cfg{grid-template-columns:1.3fr 1fr}}
-.price{position:sticky;top:0;background:var(--ink);color:#fff;border-radius:14px;padding:1rem}.price .big{font-size:1.8rem}.price small{color:#cfc6b8}
-.sw{display:inline-block;width:38px;height:38px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);margin:.2rem;cursor:pointer}.sw.on{box-shadow:0 0 0 3px var(--acc)}
-label{display:block;margin:.4rem 0}input[type=text],input[type=email],input[type=date],select{padding:.5rem;border:1px solid var(--line);border-radius:8px;width:100%;max-width:340px}
-.trust{display:grid;gap:.5rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:2rem}
-.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:1rem;z-index:9}.modal.on{display:flex}.modal .card{max-width:520px;width:100%;max-height:90vh;overflow:auto}
-#chat{position:fixed;right:1rem;bottom:1rem;z-index:8}#chatbox{display:none;width:300px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:.5rem}#chatbox.on{display:block}
-#msgs{height:240px;overflow:auto;padding:.6rem;font-size:.85rem}.m{margin:.3rem 0;padding:.4rem .6rem;border-radius:10px;background:#f1ede6}.m.u{background:var(--ink);color:#fff;text-align:right}
-.opts button{font-size:.8rem;padding:.35rem .7rem;margin:.15rem}
+.wrap{max-width:640px;margin:auto;padding:1.25rem 1.25rem 4rem}
+header{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--mut)}
+.logo{font-weight:700;letter-spacing:.25em;color:var(--ink);font-size:1rem}.logo span{color:var(--acc)}
+.prog{height:3px;background:var(--line);border-radius:3px;margin:1rem 0 2rem}.prog i{display:block;height:100%;background:var(--acc);transition:width .4s}
+h1{font-weight:300;font-size:clamp(2rem,7vw,3rem);line-height:1.1;margin:.5rem 0 1.5rem}h2{font-weight:300;font-size:1.8rem;margin:.2rem 0 1rem}
+.drop{border:1.5px dashed #c9c1b3;border-radius:18px;padding:2.5rem 1rem;text-align:center;background:#fff;cursor:pointer}
+.drop.over{border-color:var(--acc);background:#f6efe4}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:.95rem 1.4rem;background:var(--ink);color:#fff;font-size:1rem;width:100%}
+.link{background:none;color:var(--mut);text-decoration:underline;padding:.4rem;width:auto;font-size:.9rem}
+.small{font-size:.8rem;color:var(--mut)}.center{text-align:center}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.photo{position:relative;border-radius:18px;overflow:hidden;background:#e9e4db;aspect-ratio:4/3}.photo img{width:100%;height:100%;object-fit:cover}.photo svg{position:absolute;inset:0;width:100%;height:100%}
+.scan{position:absolute;left:0;right:0;height:3px;background:var(--acc);box-shadow:0 0 20px var(--acc);animation:sc 1.2s linear infinite}@keyframes sc{from{top:0}to{top:100%}}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1rem 0}.facts label,.q label{font-size:.75rem;color:var(--mut);display:block}
+select,input{font:inherit;width:100%;padding:.65rem;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.quote{background:var(--ink);color:#fff;border-radius:18px;padding:1.4rem;margin:1rem 0}.quote .big{font-size:clamp(1.8rem,7vw,2.4rem);font-weight:300}.quote small{color:#cfc6b8}
+.q{display:grid;gap:.7rem;margin:1rem 0}
+.sec{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.6rem}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;justify-content:center;z-index:9}.modal.on{display:flex}
+.sheet{background:#fff;width:100%;max-width:560px;border-radius:18px 18px 0 0;padding:1.4rem;max-height:90vh;overflow:auto}@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:18px}}
 .tag{font-size:.7rem;background:#efe7da;padding:.1rem .4rem;border-radius:6px}
-@media print{.demo,header,.geo,#chat,.noprint{display:none!important}}
-</style></head><body>
-<div class="demo" role="note" data-i="demo">DEMO / PROTOTIPO NO OFICIAL – precios ilustrativos, no se envía ningún dato</div>
-<header><div class="logo">ON <span>LEVEL</span></div>
-<select id="lang" aria-label="Idioma"><option value="es">ES</option><option value="en">EN</option><option value="pt">PT</option><option value="fr">FR</option></select></header>
-<div class="geo" role="status"><span id="geomsg">Detectando tu ubicación…</span>
-<select id="region" aria-label="Región"></select></div>
-<main>
-<h1 data-i="h1">Tu ascensor de diseño, configurado a tu medida</h1>
-<p id="zoneinfo" class="noprint"></p>
-<div class="steps noprint" id="steps"></div>
-<div class="cfg"><section id="stage" class="card"></section>
-<aside class="price" aria-live="polite"><small data-i="est">Precio estimado (demo)</small><div class="big" id="ptotal"></div><div id="pmonth"></div><small id="pvat"></small><hr style="border-color:#444"><div id="psum" style="font-size:.85rem"></div>
-<div class="noprint" style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap"><button class="sec" style="color:#fff;border-color:#fff" id="prev">←</button><button id="next" style="background:var(--acc)">→</button></div></aside></div>
-<section class="trust noprint">
-<div class="card">✔ <b>Certificaciones</b> <span class="tag">ejemplo</span><br><small>EN 81-41 · Directiva Máquinas 2006/42/CE · ISO 9001</small></div>
-<div class="card">🛡 <b>Garantía</b> <span class="tag">ejemplo</span><br><small>3 años + mantenimiento opcional</small></div>
-<div class="card">⏱ <b>Plazo</b><br><small id="tlead"></small></div>
-<div class="card">📍 <b>Distribuidor</b> <span class="tag">ficticio</span><br><small id="tdist"></small></div>
-</section></main>
-<div id="chat"><div id="chatbox" role="dialog" aria-label="Asistente IA"><div style="padding:.6rem;border-bottom:1px solid var(--line)"><b>Asistente On Level (IA simulada)</b></div><div id="msgs"></div><div class="opts" id="copts" style="padding:.4rem"></div></div><button id="chatbtn" aria-expanded="false">💬 Asistente</button></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="card" id="mbody"></div></div>
+.m{margin:.3rem 0;padding:.5rem .7rem;border-radius:10px;background:#f1ede6;font-size:.9rem}.m.u{background:var(--ink);color:#fff;text-align:right}
+.chips button{width:auto;font-size:.85rem;padding:.45rem .8rem;margin:.2rem;background:#fff;color:var(--ink);border:1px solid var(--line)}
+footer{text-align:center;margin-top:3rem}
+.stage{display:flex;flex-direction:column;gap:.4rem}.stage div{background:#f6efe4;border-radius:10px;padding:.6rem .8rem;display:flex;justify-content:space-between}
+[hidden]{display:none!important}
+</style></head><body><div class="wrap">
+<header><div class="logo">ON <span>LEVEL</span></div><span class="tag">Demo · datos de ejemplo</span></header>
+<div class="prog" aria-hidden="true"><i id="bar" style="width:33%"></i></div>
+
+<section id="s1">
+<h1>Haz una foto. Te damos el presupuesto.</h1>
+<label class="drop" id="drop" tabindex="0">
+<input type="file" id="file" accept="image/*" capture="environment" hidden>
+<div style="font-size:2rem">📷</div><b>Sube o haz una foto</b><br><span class="small">de la escalera, el hueco o la zona del ascensor<br>Arrastra aquí o toca para elegir</span></label>
+<p class="small center">🔒 La foto se procesa en tu navegador y no se sube a ningún sitio.</p>
+<div class="center"><button class="link" id="manual">Sin foto, empezar manual</button></div>
+<p class="small center"><span id="geo">Precios para España</span> · <button class="link" id="chg" style="padding:0">cambiar</button>
+<select id="region" hidden aria-label="Región" style="max-width:220px;margin:.4rem auto;display:block"></select></p>
+</section>
+
+<section id="s2" hidden>
+<div class="photo" id="ph"><svg id="ov" viewBox="0 0 400 300" preserveAspectRatio="none"></svg></div>
+<p class="small" id="anal">Analizando foto…</p>
+<div id="res" hidden>
+<p class="small"><span class="tag">simulación</span> En producción un modelo de visión estimará dimensiones, plantas y tipo de hueco. Revisa y corrige:</p>
+<div class="facts">
+<div><label>Plantas / paradas<select id="fl"><option>2</option><option>3</option><option>4</option></select></label></div>
+<div><label>Espacio<select id="sp"><option value="int">Interior</option><option value="ext">Exterior</option></select></label></div>
+<div><label>Ancho aprox. del hueco<select id="w"><option value="80">≈ 80 cm</option><option value="100" selected>≈ 100 cm</option><option value="130">≈ 130 cm</option></select></label></div>
+<div><label>Estilo<select id="st"><option>Contemporáneo</option><option>Clásico</option><option>Industrial</option></select></label></div></div>
+<div class="quote" aria-live="polite"><small>Presupuesto orientativo · <span id="mod"></span></small><div class="big" id="range"></div>
+<div id="month"></div><small id="tax"></small></div>
+<div class="q">
+<label>Acabado<select id="fin"><option value="0">Blanco mate (incluido)</option><option value="600">Roble natural</option><option value="900">Antracita</option><option value="1900">Vidrio extra-claro</option></select></label>
+<label>Uso principal<select id="use"><option>Movilidad reducida / mayores</option><option>Comodidad y diseño</option><option>Accesibilidad negocio</option></select></label>
+<label>Código postal<input id="cp" inputmode="numeric" placeholder="08232"></label></div>
+<button id="toC">Reservar visita técnica gratuita</button>
+<div class="sec"><button class="link" id="dep">Reservar con señal</button><button class="link" id="finb">Ver opciones de financiación</button></div>
+</div></section>
+
+<section id="s3" hidden>
+<div id="form"><h2>Visita técnica gratuita</h2><p class="small" id="sumq"></p>
+<form id="vf" class="q"><label>Nombre<input required autocomplete="off"></label><label>Teléfono / WhatsApp<input type="tel" required autocomplete="off"></label><label>Email<input type="email" required autocomplete="off"></label>
+<label>Franja preferida<select><option>Mañana (9–13 h)</option><option>Tarde (16–19 h)</option><option>Me da igual</option></select></label>
+<button>Confirmar visita</button><p class="small center">Demo: no se envía ningún dato.</p></form></div>
+<div id="done" hidden class="center"><div style="font-size:3rem">✓</div><h2>Visita solicitada</h2><p>Un agente de IA te confirmará día y hora por WhatsApp/email con <b id="dist"></b> <span class="tag">ficticio</span>.</p><p class="small">(Simulado: no se ha enviado nada.)</p><button class="link" onclick="location.reload()">Empezar de nuevo</button></div>
+<div class="center"><button class="link" id="back">← Volver al presupuesto</button></div>
+</section>
+
+<footer class="small"><button class="link" id="chat">¿Dudas? Habla con el asistente</button> · <button class="link" id="how">Cómo funciona el embudo</button><br>Prototipo no oficial · precios ilustrativos</footer>
+</div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="sheet" id="mb"></div></div>
 <script>
-const R={ES:{n:"España",c:"EUR",s:"€",fx:1,vat:.21,lead:"8–10 semanas",d:"Elevaciones Ejemplo BCN (Barcelona)",pay:["card","apple","google","transfer","bnpl","fin","hitos","leasing"],na:[]},
-PT:{n:"Portugal",c:"EUR",s:"€",fx:1,vat:.23,lead:"10–12 semanas",d:"Lisboa Lifts Demo (Lisboa)",pay:["card","apple","google","transfer","bnpl","fin","hitos"],na:["platform"]},
-FR:{n:"Francia",c:"EUR",s:"€",fx:1,vat:.20,lead:"10–12 semanas",d:"Ascenseurs Exemple (Lyon)",pay:["card","apple","google","transfer","bnpl","fin","hitos","leasing"],na:[]},
-CH:{n:"Suiza",c:"CHF",s:"CHF ",fx:.95,vat:.081,lead:"12 semanas",d:"Lift Muster AG (Zúrich)",pay:["card","apple","google","transfer","fin","leasing"],na:["loft"]},
-GB:{n:"Reino Unido",c:"GBP",s:"£",fx:.85,vat:.20,lead:"12–14 semanas",d:"Example Home Lifts Ltd (Londres)",pay:["card","apple","google","transfer","bnpl","fin"],na:["platform"]},
-MA:{n:"Marruecos",c:"MAD",s:"MAD ",fx:10.8,vat:.20,lead:"14–16 semanas",d:"Sin distribuidor – equipo On Level",pay:["card","transfer","hitos"],na:["panorama","loft"]},
-IT:{n:"Italia / Cerdeña",c:"EUR",s:"€",fx:1,vat:.22,lead:"10–12 semanas",d:"Ascensori Esempio (Cagliari)",pay:["card","apple","google","transfer","bnpl","fin","hitos"],na:[]}};
-const PAY={card:"Tarjeta",apple:"Apple Pay",google:"Google Pay",transfer:"Transferencia",bnpl:"Pago fraccionado (tipo Klarna) – señal y extras",fin:"Financiación 12–84 meses (Cetelem/Sequra/Alma – ejemplo)",hitos:"Pago por hitos",leasing:"Leasing empresas"};
-const M=[{id:"essence",n:"Essence",d:"Compacto sin foso, 2 paradas",p:16900},{id:"panorama",n:"Panorama",d:"Cabina panorámica de vidrio",p:21900},{id:"loft",n:"Loft",d:"Hasta 3–4 paradas",p:24900},{id:"platform",n:"Platform",d:"Plataforma salvaescaleras vertical",p:9900}];
-const FIN=[{id:"oak",n:"Roble natural",c:"#b08a5b",p:0},{id:"white",n:"Blanco mate",c:"#f2f0ec",p:0},{id:"anth",n:"Antracita",c:"#3a3a3a",p:600},{id:"brass",n:"Latón cepillado",c:"#c2a05a",p:1400},{id:"glass",n:"Vidrio extra-claro",c:"#cfe3e6",p:1900}];
-const EX=[{id:"remote",n:"Mando a distancia",p:290},{id:"led",n:"Iluminación LED ambiental",p:450},{id:"phone",n:"Teléfono de emergencia GSM",p:380},{id:"auto",n:"Puertas automáticas",p:2600},{id:"care",n:"Mantenimiento 5 años",p:1500}];
-const T={en:{demo:"DEMO / UNOFFICIAL PROTOTYPE – illustrative prices, no data is sent",h1:"Your design lift, configured to measure",est:"Estimated price (demo)"}};
-let S={r:"ES",step:0,floors:2,home:"Casa unifamiliar",model:"essence",fin:"oak",ex:[]},TIN=.069;
-const $=i=>document.getElementById(i);
-const fmt=v=>{const z=R[S.r];return z.s+Math.round(v*z.fx).toLocaleString("es-ES")};
-const total=()=>{const m=M.find(x=>x.id==S.model);let t=m.p+Math.max(0,S.floors-2)*3200+FIN.find(f=>f.id==S.fin).p+S.ex.reduce((a,e)=>a+EX.find(x=>x.id==e).p,0);return t};
-const quota=(P,n,r=TIN)=>{const i=r/12;return P*i/(1-Math.pow(1+i,-n))};
+const R={ES:{n:"España",s:"€",fx:1,vat:.21,lead:"8–10 semanas",d:"Elevaciones Ejemplo BCN",pay:["bnpl","fin","hitos","leasing"]},
+PT:{n:"Portugal",s:"€",fx:1,vat:.23,lead:"10–12 semanas",d:"Lisboa Lifts Demo",pay:["bnpl","fin","hitos"]},
+FR:{n:"Francia",s:"€",fx:1,vat:.20,lead:"10–12 semanas",d:"Ascenseurs Exemple",pay:["bnpl","fin","hitos","leasing"]},
+CH:{n:"Suiza",s:"CHF ",fx:.95,vat:.081,lead:"12 semanas",d:"Lift Muster AG",pay:["fin","leasing"]},
+GB:{n:"Reino Unido",s:"£",fx:.85,vat:.20,lead:"12–14 semanas",d:"Example Home Lifts Ltd",pay:["bnpl","fin"]},
+MA:{n:"Marruecos",s:"MAD ",fx:10.8,vat:.20,lead:"14–16 semanas",d:"equipo On Level",pay:["hitos"]},
+IT:{n:"Italia / Cerdeña",s:"€",fx:1,vat:.22,lead:"10–12 semanas",d:"Ascensori Esempio",pay:["bnpl","fin","hitos"]}};
+const PAY={bnpl:"Pago fraccionado (tipo Klarna): señal y extras en 3 plazos",fin:"Financiación a plazos de 12 a 84 meses",hitos:"Pago por hitos: señal · fabricación · instalación",leasing:"Leasing para empresas y comunidades"};
+const TIN=.069,$=i=>document.getElementById(i);let reg="ES";
+const fmt=v=>R[reg].s+Math.round(v*R[reg].fx).toLocaleString("es-ES");
+const q=(P,n)=>{const i=TIN/12;return P*i/(1-Math.pow(1+i,-n))};
 Object.entries(R).forEach(([k,v])=>$("region").add(new Option(v.n,k)));
-$("region").onchange=e=>setR(e.target.value);
-function setR(k){S.r=k;$("region").value=k;const z=R[k];$("geomsg").textContent=`Mostrando productos y precios para ${z.n}, ¿es correcto?`;
-if(z.na.includes(S.model))S.model=M.find(m=>!z.na.includes(m.id)).id;
-$("zoneinfo").innerHTML=`Moneda ${z.c} · IVA ${Math.round(z.vat*1000)/10}% · Plazo ${z.lead} · Pago: ${z.pay.map(p=>PAY[p].split(" (")[0].split(" –")[0]).join(", ")}`;
-$("tlead").textContent=z.lead;$("tdist").textContent=z.d;render()}
-const STEPS=["Vivienda","Modelo","Acabados","Extras","Resumen"];
-function cabin(){const f=FIN.find(x=>x.id==S.fin),pano=S.model=="panorama";return `<svg viewBox="0 0 160 220" width="150" role="img" aria-label="Vista previa cabina ${f.n}"><rect x="10" y="5" width="140" height="210" rx="6" fill="#ddd"/><rect x="22" y="18" width="116" height="184" fill="${f.c}" ${pano?'opacity=".55"':''}/>${S.ex.includes("led")?'<rect x="22" y="18" width="116" height="6" fill="#ffe9a8"/>':''}<rect x="110" y="95" width="18" height="30" rx="3" fill="#222"/><line x1="80" y1="18" x2="80" y2="202" stroke="#0002"/></svg>`}
-function render(){const z=R[S.r];$("steps").innerHTML=STEPS.map((s,i)=>`<b class="${i<=S.step?'on':''}">${i+1}. ${s}</b>`).join("");let h="";
-if(S.step==0)h=`<h2>1. Tu vivienda</h2><label>Tipo<select id="home">${["Casa unifamiliar","Dúplex / ático","Rehabilitación","Empresa / comunidad"].map(o=>`<option ${o==S.home?"selected":""}>${o}</option>`).join("")}</select></label><label>Número de paradas: <b>${S.floors}</b><input type="range" id="fl" min="2" max="4" value="${S.floors}" aria-label="Paradas"></label><small>Cada parada adicional: +${fmt(3200)}</small>`;
-if(S.step==1)h=`<h2>2. Modelo</h2><div class="grid">${M.map(m=>{const na=z.na.includes(m.id);return `<div class="card ${S.model==m.id?'sel':''} ${na?'na':''}"><b>${m.n}</b><br><small>${m.d}</small><p>desde <b>${fmt(m.p)}</b><br><small>o ${fmt(quota(m.p,84))}/mes</small></p>${na?`<button class="sec" onclick="contact('${m.n}')">Contacta con nuestro equipo</button>`:`<button onclick="S.model='${m.id}';render()">${S.model==m.id?'✓ Elegido':'Elegir'}</button>`}</div>`}).join("")}</div>`;
-if(S.step==2)h=`<h2>3. Acabados</h2><div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">${cabin()}<div>${FIN.map(f=>`<span role="button" tabindex="0" aria-label="${f.n}" class="sw ${S.fin==f.id?'on':''}" style="background:${f.c}" onclick="S.fin='${f.id}';render()" onkeydown="if(event.key=='Enter'){S.fin='${f.id}';render()}"></span>`).join("")}<p>${FIN.find(f=>f.id==S.fin).n} ${FIN.find(f=>f.id==S.fin).p?'+'+fmt(FIN.find(f=>f.id==S.fin).p):'(incluido)'}</p></div></div>`;
-if(S.step==3)h=`<h2>4. Extras</h2>${EX.map(e=>`<label><input type="checkbox" ${S.ex.includes(e.id)?"checked":""} onchange="tog('${e.id}')"> ${e.n} (+${fmt(e.p)})</label>`).join("")}`;
-if(S.step==4)h=`<h2>5. Resumen</h2>${cabin()}<p>Elige cómo continuar:</p><div style="display:flex;flex-direction:column;gap:.5rem;max-width:340px"><button onclick="reserve()">Reservar con señal (${fmt(500)}, reembolsable)</button><button class="sec" onclick="visit()">Solicitar visita técnica gratuita</button><button class="sec" onclick="window.print()">Descargar propuesta (PDF)</button><button class="sec" onclick="finance()">Simular financiación</button></div>`;
-$("stage").innerHTML=h;
-if($("fl"))$("fl").oninput=e=>{S.floors=+e.target.value;render()};if($("home"))$("home").onchange=e=>S.home=e.target.value;
-const t=total(),m=M.find(x=>x.id==S.model);$("ptotal").textContent=fmt(t);$("pmonth").textContent=z.pay.includes("fin")?`desde ${fmt(quota(t,84))}/mes · 84 meses · TIN ${(TIN*100).toFixed(1)}% (ilustrativo)`:"Financiación no disponible en esta zona";
-$("pvat").textContent=`IVA (${Math.round(z.vat*1000)/10}%) no incluido · con IVA: ${fmt(t*(1+z.vat))}`;
-$("psum").innerHTML=`${S.home} · ${S.floors} paradas<br>Modelo ${m.n} · ${FIN.find(f=>f.id==S.fin).n}<br>${S.ex.map(e=>EX.find(x=>x.id==e).n).join(", ")||"Sin extras"}<br>Distribuidor: ${z.d}`;
-$("prev").disabled=S.step==0;$("next").style.display=S.step==4?"none":"";}
-function tog(id){S.ex=S.ex.includes(id)?S.ex.filter(x=>x!=id):[...S.ex,id];render()}
-$("prev").onclick=()=>{if(S.step>0){S.step--;render()}};$("next").onclick=()=>{if(S.step<4){S.step++;render()}};
-function modal(h){$("mbody").innerHTML=h+`<p><small>⚠ Demo: no se procesa ningún pago ni se envían datos.</small></p><button class="sec" onclick="closeM()">Cerrar</button>`;$("modal").classList.add("on");$("mbody").querySelector("button,input,select")?.focus()}
-function closeM(){$("modal").classList.remove("on")}document.addEventListener("keydown",e=>{if(e.key=="Escape")closeM()});
-function reserve(){const z=R[S.r],opts=z.pay.filter(p=>["card","apple","google","transfer","bnpl"].includes(p));modal(`<h2>Reserva con señal</h2><p>Señal: <b>${fmt(500)}</b> (reembolsable hasta la visita técnica)</p>${opts.map((p,i)=>`<label><input type="radio" name="pm" ${i?"":"checked"}> ${PAY[p]}${p=="bnpl"?` – 3 pagos de ${fmt(500/3)}`:""}</label>`).join("")}<button onclick="this.parentNode.innerHTML='<h2>✓ Reserva simulada</h2><p>En la versión real recibirías confirmación y el distribuidor te llamaría.</p><button onclick=closeM()>Cerrar</button>'">Pagar (simulado)</button>`)}
-function visit(){modal(`<h2>Visita técnica gratuita</h2><form onsubmit="event.preventDefault();this.innerHTML='<p>✓ Solicitud simulada. Un agente de IA te confirmará la cita por WhatsApp/email con ${R[S.r].d}.</p>'"><label>Nombre<input type="text" required></label><label>Email<input type="email" required></label><label>Fecha preferida<input type="date" required min="${new Date().toISOString().slice(0,10)}"></label><label>Franja<select><option>Mañana</option><option>Tarde</option></select></label><button>Solicitar (demo)</button></form>`)}
-function finance(){const z=R[S.r];if(!z.pay.includes("fin"))return modal("<h2>Financiación</h2><p>No disponible en esta zona. Opciones: "+z.pay.map(p=>PAY[p]).join(", ")+"</p>");
-modal(`<h2>Simulador de financiación</h2><p>Importe con IVA: <b>${fmt(total()*(1+z.vat))}</b></p><label>Plazo: <b id="nv">60</b> meses<input type="range" id="n" min="12" max="84" step="12" value="60"></label><p>Cuota: <b id="qv"></b> · TIN ${(TIN*100).toFixed(1)}% ilustrativo</p><p><small>Entidades (ejemplo): Cetelem / Sequra / Alma. Pre-aprobación sin afectar historial (simulado).</small></p><h3>Otras opciones</h3><ul>${z.pay.filter(p=>["bnpl","hitos","leasing"].includes(p)).map(p=>`<li>${PAY[p]}</li>`).join("")}</ul>`);
-const u=()=>{const n=+$("n").value;$("nv").textContent=n;$("qv").textContent=fmt(quota(total()*(1+z.vat),n))+"/mes"};$("n").oninput=u;u()}
-function contact(n){modal(`<h2>${n} – Contacta con nuestro equipo</h2><p>Este modelo aún no está disponible en ${R[S.r].n}. Nuestro equipo (y el agente de captación de distribuidores) te contactará.</p><form onsubmit="event.preventDefault();this.innerHTML='<p>✓ Recibido (demo).</p>'"><label>Email<input type="email" required></label><button>Enviar (demo)</button></form>`)}
-// chat
-const flow={start:{m:"¡Hola! Soy el asistente de On Level (IA simulada). ¿Qué necesitas?",o:{"Precio orientativo":"price","Plazos":"lead","Agendar visita":"q1"}},
-price:{m:()=>`El ${M.find(x=>x.id==S.model).n} configurado sale por ${fmt(total())} + IVA, o ${fmt(quota(total(),84))}/mes.`,o:{"Agendar visita":"q1","Volver":"start"}},
-lead:{m:()=>`En ${R[S.r].n} el plazo estimado es ${R[S.r].lead} tras la visita técnica.`,o:{"Agendar visita":"q1","Volver":"start"}},
-q1:{m:"¿Es obra nueva o vivienda existente?",o:{"Obra nueva":"q2","Vivienda existente":"q2"}},
-q2:{m:"¿Cuándo te gustaría tenerlo instalado?",o:{"< 3 meses":"q3","3–6 meses":"q3","Solo informándome":"q3"}},
-q3:{m:()=>`Perfecto. Te propongo visita con ${R[S.r].d}: ¿martes 10:00 o jueves 17:00?`,o:{"Martes 10:00":"ok","Jueves 17:00":"ok"}},
-ok:{m:"✓ Cita reservada (simulado). Te confirmaría por WhatsApp/email.",o:{"Inicio":"start"}}};
-function say(t,u){const d=document.createElement("div");d.className="m"+(u?" u":"");d.textContent=t;$("msgs").append(d);$("msgs").scrollTop=1e6}
-function go(k){const n=flow[k];say(typeof n.m=="function"?n.m():n.m);$("copts").innerHTML="";Object.entries(n.o).forEach(([l,t])=>{const b=document.createElement("button");b.textContent=l;b.onclick=()=>{say(l,1);go(t)};$("copts").append(b)})}
-$("chatbtn").onclick=()=>{const o=$("chatbox").classList.toggle("on");$("chatbtn").setAttribute("aria-expanded",o);if(o&&!$("msgs").children.length)go("start")};
-$("lang").onchange=e=>{const t=T[e.target.value];document.querySelectorAll("[data-i]").forEach(el=>{el.dataset.es??=el.textContent;el.textContent=t?.[el.dataset.i]||el.dataset.es})};
+function setR(k){reg=k;$("region").value=k;$("geo").textContent="Precios para "+R[k].n;calc()}
+$("chg").onclick=()=>$("region").hidden=!$("region").hidden;$("region").onchange=e=>{setR(e.target.value);$("region").hidden=true};
+fetch("https://get.geojs.io/v1/ip/geo.json").then(r=>r.json()).then(g=>{const k={UK:"GB"}[g.country_code]||g.country_code;if(R[k])setR(k)}).catch(()=>{});
+function show(n){[1,2,3].forEach(i=>$("s"+i).hidden=i!=n);$("bar").style.width=n*33.4+"%";scrollTo(0,0)}
+function model(){const f=+$("fl").value,w=+$("w").value;if(w<=80)return{n:"Platform (plataforma)",p:9900};if(f>=3)return{n:"Loft (3–4 paradas)",p:24900};if($("st").value=="Contemporáneo"&&$("sp").value=="ext")return{n:"Panorama (panorámico)",p:21900};return{n:"Essence (sin foso)",p:16900}}
+function calc(){if($("s2").hidden&&!$("res")) return;const m=model(),f=+$("fl").value,lo=m.p+(f-2)*3200+ +$("fin").value+($("sp").value=="ext"?2500:0),hi=lo*1.25,z=R[reg];
+$("mod").textContent="Recomendado: "+m.n;$("range").textContent=fmt(lo)+" – "+fmt(hi);
+$("month").textContent=z.pay.includes("fin")?`o desde ${fmt(q(lo*(1+z.vat),84))}/mes · Plazo ${z.lead}`:`Plazo ${z.lead}`;
+$("tax").textContent=`Sin IVA (${Math.round(z.vat*1000)/10}%). Con IVA desde ${fmt(lo*(1+z.vat))}. Ilustrativo.`;
+$("sumq").textContent=`${m.n} · ${fmt(lo)}–${fmt(hi)} + IVA · ${z.n}`;$("dist").textContent=z.d;window.LO=lo}
+["fl","sp","w","st","fin"].forEach(i=>$(i).onchange=calc);
+function overlay(){const c=$("fin").selectedOptions[0].text.includes("Roble")?"#b08a5b":$("fin").value=="900"?"#3a3a3a":"#ffffff";
+$("ov").innerHTML=`<rect x="235" y="40" width="110" height="230" fill="${c}" fill-opacity=".35" stroke="#a8865a" stroke-width="3" stroke-dasharray="8 5" rx="6"/><text x="290" y="32" text-anchor="middle" fill="#fff" font-size="14" style="paint-order:stroke" stroke="#000" stroke-width="3">Cabina propuesta</text>`}
+function analyze(src){show(2);const ph=$("ph");ph.querySelector("img")?.remove();ph.querySelector(".scan")?.remove();
+if(src){const im=new Image();im.src=src;im.alt="Tu foto";ph.prepend(im)}
+const s=document.createElement("div");s.className="scan";ph.append(s);$("res").hidden=true;$("anal").hidden=false;$("ov").innerHTML="";
+$("anal").textContent=src?"Analizando foto… (simulación)":"Modo manual: indica los datos";
+setTimeout(()=>{s.remove();$("anal").hidden=true;$("res").hidden=false;overlay();calc()},src?1800:300)}
+$("fin").addEventListener("change",overlay);
+function load(f){if(!f||!f.type.startsWith("image/"))return;const r=new FileReader();r.onload=e=>analyze(e.target.result);r.readAsDataURL(f)}
+$("file").onchange=e=>load(e.target.files[0]);const d=$("drop");
+d.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();$("file").click()}};
+d.ondragover=e=>{e.preventDefault();d.classList.add("over")};d.ondragleave=()=>d.classList.remove("over");d.ondrop=e=>{e.preventDefault();d.classList.remove("over");load(e.dataTransfer.files[0])};
+$("manual").onclick=()=>analyze(null);$("toC").onclick=()=>show(3);$("back").onclick=()=>show(2);
+$("vf").onsubmit=e=>{e.preventDefault();$("form").hidden=true;$("back").hidden=true;$("done").hidden=false;$("bar").style.width="100%"};
+function modal(h){$("mb").innerHTML=h+`<p class="small">Demo: no se procesa ningún pago ni se envían datos.</p><button class="link" onclick="closeM()">Cerrar</button>`;$("modal").classList.add("on")}
+function closeM(){$("modal").classList.remove("on")}$("modal").onclick=e=>{if(e.target.id=="modal")closeM()};document.onkeydown=e=>{if(e.key=="Escape")closeM()};
+$("dep").onclick=()=>modal(`<h2>Reservar con señal</h2><p>Señal de <b>${fmt(500)}</b>, reembolsable hasta la visita técnica. Tarjeta, monedero móvil o transferencia${R[reg].pay.includes("bnpl")?", o en 3 plazos de "+fmt(500/3):""}.</p><button onclick="this.parentNode.innerHTML='<h2>✓ Señal simulada</h2><button class=link onclick=closeM()>Cerrar</button>'">Pagar (simulado)</button>`);
+$("finb").onclick=()=>{const z=R[reg],T=(window.LO||16900)*(1+z.vat);modal(`<h2>Opciones de financiación</h2><ul>${z.pay.map(p=>`<li>${PAY[p]}</li>`).join("")}</ul>${z.pay.includes("fin")?`<p>Importe con IVA: <b>${fmt(T)}</b></p><label class="small">Plazo: <b id="nv">60</b> meses<input type="range" id="n" min="12" max="84" step="12" value="60"></label><p>Cuota: <b id="qv"></b> · TIN ${(TIN*100).toFixed(1)}% ilustrativo</p>`:"<p class='small'>Financiación a plazos no disponible en esta zona (demo).</p>"}`);
+if($("n")){const u=()=>{$("nv").textContent=$("n").value;$("qv").textContent=fmt(q(T,+$("n").value))+"/mes"};$("n").oninput=u;u()}};
+$("how").onclick=()=>modal(`<h2>Cómo funciona el embudo</h2><div class="stage"><div><span>1 · Foto subida</span><b>100%</b></div><div><span>2 · Presupuesto visto</span><b>≈ 70%</b></div><div><span>3 · Visita técnica reservada</span><b>≈ 20–25%</b></div><div><span>4 · Venta cerrada</span><b>≈ 30–40% de visitas</b></div></div><p class="small"><span class="tag">estimaciones</span> Objetivos: foto→presupuesto 70%, presupuesto→visita 20–25%, visita→venta 30–40%. Un agente de IA confirma la visita, asigna el distribuidor por código postal y hace seguimiento.</p>`);
+const flow={start:["Hola, soy el asistente de On Level (simulado). ¿En qué te ayudo?",{"¿Cuánto cuesta?":"p","¿Necesito obra?":"o","Agendar visita":"v"}],p:[()=>`Según tus datos, ${$("range").textContent||"desde "+fmt(16900)} + IVA. Lo confirmamos en la visita gratuita.`,{"Agendar visita":"v"}],o:["Nuestros modelos sin foso requieren obra mínima: suele bastar 1 día de preparación.",{"Agendar visita":"v"}],v:["Perfecto, te llevo al formulario de visita.",{}]};
+function chat(k){const [m,o]=flow[k];$("msgs").insertAdjacentHTML("beforeend",`<div class="m">${typeof m=="function"?m():m}</div>`);$("ch").innerHTML="";Object.entries(o).forEach(([l,t])=>{const b=document.createElement("button");b.textContent=l;b.onclick=()=>{$("msgs").insertAdjacentHTML("beforeend",`<div class="m u">${l}</div>`);chat(t)};$("ch").append(b)});if(k=="v")setTimeout(()=>{closeM();if($("res").hidden)analyze(null);setTimeout(()=>show(3),400)},900)}
+$("chat").onclick=()=>{modal(`<h2>Asistente</h2><div id="msgs"></div><div class="chips" id="ch"></div>`);chat("start")};
 setR("ES");
-const map={ES:"ES",PT:"PT",FR:"FR",CH:"CH",GB:"GB",UK:"GB",MA:"MA",IT:"IT"};
-fetch("https://get.geojs.io/v1/ip/geo.json").then(r=>r.json()).then(g=>{const k=map[g.country_code];if(k)setR(k);else $("geomsg").textContent+=" (zona no detectada, por defecto España)"}).catch(()=>{$("geomsg").textContent="No hemos podido detectar tu zona: mostrando España. ¿Es correcto?"});
 </script></body></html>
